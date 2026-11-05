@@ -1,27 +1,31 @@
 #include <stdio.h>
-#include "../include/huffman.h"
+#include <string.h>
+#include "../include/compressao.h"     /* Etapa 4 */
+#include "../include/descompressao.h"  /* Etapa 5 */
 
-int main() {
+/*
+ * Uso:
+ *   main c <arquivo_original>   <arquivo_comprimido>    -> comprime
+ *   main d <arquivo_comprimido> <arquivo_descomprimido> -> descomprime
+ */
+static void mostrar_uso(const char *programa) {
+    printf("Uso:\n");
+    printf("  %s c <original> <comprimido>      (comprimir)\n", programa);
+    printf("  %s d <comprimido> <descomprimido> (descomprimir)\n", programa);
+}
 
-    /* TESTE DE FREQUENCIA
-
-    // Cada posição do vetor representa um digito ASCII, assim ele recebe só a frequencia de cada simbolo.
-    unsigned long frequencias[256] = {0};
-    
-    const char *arquivo_teste = "testes/redundancia_baixa.txt";
-    
-    printf("Analisando frequencias do arquivo: %s\n", arquivo_teste);
-    calcular_frequencias(arquivo_teste, frequencias);
-    
-    // Laço pra printar a frequencia de cada caractere
-    for (int i = 0; i < 256; i++) {
-        if (frequencias[i] > 0) {
-            // Imprime o código ASCII e o caractere visual correspondente
-            printf("ASCII %3d (%c): %lu vezes\n", i, (char)i, frequencias[i]);
-        }
+int main(int argc, char *argv[]) {
+    if (argc != 4) {
+        mostrar_uso(argv[0]);
+        return 2;
     }
 
-    */
-   
-    return 0;
+    if (strcmp(argv[1], "c") == 0)
+        return comprimir_arquivo(argv[2], argv[3]) == 0 ? 0 : 1;
+
+    if (strcmp(argv[1], "d") == 0)
+        return descomprimir_arquivo(argv[2], argv[3]) == 0 ? 0 : 1;
+
+    mostrar_uso(argv[0]);
+    return 2;
 }
